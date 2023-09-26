@@ -33,6 +33,13 @@ if [[ $1 =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   ports=$(cat $ip-ports-scan | grep "Ports:" | grep -Eo '[0-9]{1,5}/' | grep -Eo '[0-9]{1,5}' | sed -z 's/\n/,/g;s/,$/\n/')
   echo "Executing: sudo nmap -sV -sC -oN $ip-service-script-scan -p $ports $ip"
   sudo nmap -sV -sC -oN $ip-service-script-scan -p $ports $ip
+
+  if [[ $ports == *"80"* ]]; then
+    echo -e "\n-----------------------------------------------"
+    echo "port 80 detected"
+    echo "Using Gobuster to brute force directory"
+    echo -e "-----------------------------------------------\n"
+    gobuster dir -u http://$ip -w /usr/share/wordlists/dirb/common.txt
 else 
   echo "Not a valid ip address!"
 fi
