@@ -40,6 +40,7 @@ if [[ $1 =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     echo "Using Gobuster to brute force directory"
     echo -e "-----------------------------------------------\n"
     gobuster dir -u http://$ip -w /usr/share/wordlists/dirb/common.txt
+  fi
 else 
   echo "Not a valid ip address!"
 fi
