@@ -22,8 +22,8 @@ if [[ $1 =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   echo "Port scans"
   echo -e "-------------------------\n"
 
-  echo "Executing: sudo nmap -p- -T4 -oG $ip-ports-scan $ip"
-  sudo nmap -T4 --open -p- -oG -Pn $ip-ports-scan $ip 
+  echo "Executing: sudo nmap -p- -T4 -Pn -oG $ip-ports-scan $ip"
+  sudo nmap -T4 --open -p- -Pn -oG $ip-ports-scan $ip 
 
   echo -e "\n-----------------------------------------------"
   echo "Service and Default Script scans on open ports"
@@ -31,8 +31,8 @@ if [[ $1 =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
 
   echo "Extracting open ports from previous scan"
   ports=$(cat $ip-ports-scan | grep "Ports:" | grep -Eo '[0-9]{1,5}/' | grep -Eo '[0-9]{1,5}' | sed -z 's/\n/,/g;s/,$/\n/')
-  echo "Executing: sudo nmap -sV -sC -oN $ip-service-script-scan -p $ports $ip"
-  sudo nmap -sV -sC -oN -Pn $ip-service-script-scan -p $ports $ip
+  echo "Executing: sudo nmap -sV -sC -Pn -oN $ip-service-script-scan -p $ports $ip"
+  sudo nmap -sV -sC -Pn -oN $ip-service-script-scan -p $ports $ip
 
   if [[ $ports == *"80"* ]]; then
     echo -e "\n-----------------------------------------------"
