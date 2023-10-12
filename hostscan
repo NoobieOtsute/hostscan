@@ -31,8 +31,8 @@ if [[ $1 =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
 
   echo "Extracting open ports from previous scan"
   ports=$(cat $ip-ports-scan | grep "Ports:" | grep -Eo '[0-9]{1,5}/' | grep -Eo '[0-9]{1,5}' | sed -z 's/\n/,/g;s/,$/\n/')
-  echo "Executing: sudo nmap -sV -sC -Pn -oN $ip-service-script-scan -p $ports $ip"
-  sudo nmap -sV -sC -Pn -oN $ip-service-script-scan -p $ports $ip
+  echo "Executing: sudo nmap -A -Pn -oN $ip-service-script-scan -p $ports $ip"
+  sudo nmap -A -Pn -oN $ip-service-script-scan -p $ports $ip
 
   if [[ $ports == *"80"* ]]; then
     echo -e "\n-----------------------------------------------"
