@@ -3,7 +3,7 @@
 cli_help() {
   cli_name=${0##*/}
   echo "$cli_name 0.1.0
-A bash script performing port scan followed by version and script scan using nmap.
+A bash script performing port scan followed by aggressive scan using nmap.
 Scan results will be produced in the current directory.
 Developed by: Otsute
 
@@ -22,8 +22,8 @@ if [[ $1 =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   echo "Port scans"
   echo -e "-------------------------\n"
 
-  echo "Executing: sudo nmap -p- -T4 -Pn -oG $ip-ports-scan $ip"
-  sudo nmap -T4 --open -p- -Pn -oG $ip-ports-scan $ip 
+  echo "Executing: sudo nmap -v -p- -T4 -Pn -oG $ip-ports-scan $ip"
+  sudo nmap -v -T4 --open -p- -Pn -oG $ip-ports-scan $ip 
 
   echo -e "\n-----------------------------------------------"
   echo "Service and Default Script scans on open ports"
@@ -31,17 +31,6 @@ if [[ $1 =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
 
   echo "Extracting open ports from previous scan"
   ports=$(cat $ip-ports-scan | grep "Ports:" | grep -Eo '[0-9]{1,5}/' | grep -Eo '[0-9]{1,5}' | sed -z 's/\n/,/g;s/,$/\n/')
-  echo "Executing: sudo nmap -A -Pn -oN $ip-service-script-scan -p $ports $ip"
-  sudo nmap -A -Pn -oN $ip-service-script-scan -p $ports $ip
-
-  if [[ $ports == *"80"* ]]; then
-    echo -e "\n-----------------------------------------------"
-    echo "port 80 detected"
-    echo "Using Gobuster to brute force directory"
-    echo -e "-----------------------------------------------\n"
-    gobuster dir -u http://$ip -w /usr/share/wordlists/dirb/common.txt
-  fi
-else 
-  echo "Not a valid ip address!"
-fi
+  echo "Executing: sudo nmap -sV -sC -v -Pn -oN $ip-service-script-scan -p $ports $ip"
+  sudo nmap -v -sV -sC -Pn -oN $ip-agressive-scan -p $ports $ip
  
